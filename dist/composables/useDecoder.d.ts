@@ -1,4 +1,3 @@
-import { Ref } from '@vue/composition-api';
 import { BinarizerStrategy, DecoderStats, ScannerError, ScannerStatus } from '../types';
 export interface UseDecoderOptions {
     roiSize: number;
@@ -9,12 +8,12 @@ export interface UseDecoderOptions {
     onStatusChange?: (status: ScannerStatus) => void;
     onError?: (err: ScannerError) => void;
 }
-export interface UseDecoderReturn {
-    status: Ref<ScannerStatus>;
-    stats: Ref<DecoderStats>;
+export interface DecoderInstance {
+    readonly status: ScannerStatus;
+    readonly stats: DecoderStats;
     start: (video: HTMLVideoElement) => Promise<void>;
     stop: () => void;
     setStrategy: (strategy: BinarizerStrategy) => void;
 }
-export declare function useDecoder(opts: UseDecoderOptions): UseDecoderReturn;
+export declare function useDecoder(opts: UseDecoderOptions): DecoderInstance;
 //# sourceMappingURL=useDecoder.d.ts.map

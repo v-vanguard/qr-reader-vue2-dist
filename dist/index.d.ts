@@ -1,5 +1,4 @@
-export { default as QrScanner } from './components/QrScanner.vue';
-export { default as GuideOverlay } from './components/GuideOverlay.vue';
+export { QrScannerElement, defineQrScannerElement, } from './web-component/qr-scanner-element';
 export { useCamera } from './composables/useCamera';
 export { useDecoder } from './composables/useDecoder';
 export { createRoiExtractor } from './composables/useRoi';
