@@ -1,0 +1,1 @@
+{"version":3,"file":"useRoi.d.ts","sourceRoot":"","sources":["../../src/composables/useRoi.ts"],"names":[],"mappings":"AAAA,MAAM,WAAW,YAAY;IAC3B,OAAO,CAAC,KAAK,EAAE,gBAAgB,EAAE,MAAM,EAAE,iBAAiB,GAAG,OAAO,CAAC;IACrE,MAAM,CAAC,OAAO,EAAE,MAAM,GAAG,IAAI,CAAC;IAC9B,IAAI,EAAE,MAAM,CAAC;CACd;AAED,wBAAgB,kBAAkB,CAAC,OAAO,EAAE,MAAM,GAAG,YAAY,CAiDhE"}
