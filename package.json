@@ -1,6 +1,6 @@
 {
   "name": "@v-vanguard/qr-reader-vue2",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "iPad向け極小QRコードスキャナー (Vue 2 + Wasm)",
   "repository": {
     "type": "git",

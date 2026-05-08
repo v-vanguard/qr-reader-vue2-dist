@@ -1,6 +1,43 @@
 var __defProp = Object.defineProperty;
+var __defProps = Object.defineProperties;
+var __getOwnPropDescs = Object.getOwnPropertyDescriptors;
+var __getOwnPropSymbols = Object.getOwnPropertySymbols;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __propIsEnum = Object.prototype.propertyIsEnumerable;
 var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+var __spreadValues = (a, b2) => {
+  for (var prop in b2 || (b2 = {}))
+    if (__hasOwnProp.call(b2, prop))
+      __defNormalProp(a, prop, b2[prop]);
+  if (__getOwnPropSymbols)
+    for (var prop of __getOwnPropSymbols(b2)) {
+      if (__propIsEnum.call(b2, prop))
+        __defNormalProp(a, prop, b2[prop]);
+    }
+  return a;
+};
+var __spreadProps = (a, b2) => __defProps(a, __getOwnPropDescs(b2));
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
+var __async = (__this, __arguments, generator) => {
+  return new Promise((resolve, reject) => {
+    var fulfilled = (value) => {
+      try {
+        step(generator.next(value));
+      } catch (e2) {
+        reject(e2);
+      }
+    };
+    var rejected = (value) => {
+      try {
+        step(generator.throw(value));
+      } catch (e2) {
+        reject(e2);
+      }
+    };
+    var step = (x2) => x2.done ? resolve(x2.value) : Promise.resolve(x2.value).then(fulfilled, rejected);
+    step((generator = generator.apply(__this, __arguments)).next());
+  });
+};
 import { defineComponent as h, ref as T, computed as n, watch as p, onMounted as c, onBeforeUnmount as Y } from "vue";
 const G = h({
   name: "QrGuideOverlay",
@@ -35,57 +72,55 @@ const e = X.exports, z = {
 };
 function b(Q = {}) {
   const U = T(null), F = T(false), B = T(0), d = T(0);
-  async function Z(R) {
-    var _a, _b, _c, _d;
-    if (F.value)
-      return;
-    if (!((_a = navigator.mediaDevices) == null ? void 0 : _a.getUserMedia)) {
-      const W = {
-        code: "camera_unavailable",
-        message: "getUserMedia is not available"
-      };
-      throw (_b = Q.onError) == null ? void 0 : _b.call(Q, W), new Error(W.message);
-    }
-    const l = {
-      ...z,
-      ...Q.videoConstraints ?? {}
-    };
-    let S;
-    try {
-      S = await navigator.mediaDevices.getUserMedia({
-        audio: false,
-        video: l
-      });
-    } catch (W) {
-      try {
-        S = await navigator.mediaDevices.getUserMedia({
-          audio: false,
-          video: {
-            ...l,
-            width: { ideal: 1280 },
-            height: { ideal: 720 }
-          }
-        });
-      } catch (J) {
-        const V = {
-          code: W instanceof DOMException && W.name === "NotAllowedError" ? "camera_denied" : "camera_unavailable",
-          message: J instanceof Error ? J.message : String(J),
-          cause: J
+  function Z(R) {
+    return __async(this, null, function* () {
+      var _a, _b, _c, _d, _e, _f;
+      if (F.value)
+        return;
+      if (!((_a = navigator.mediaDevices) == null ? void 0 : _a.getUserMedia)) {
+        const W = {
+          code: "camera_unavailable",
+          message: "getUserMedia is not available"
         };
-        throw (_c = Q.onError) == null ? void 0 : _c.call(Q, V), J;
+        throw (_b = Q.onError) == null ? void 0 : _b.call(Q, W), new Error(W.message);
       }
-    }
-    if (Q.preferZoom && Q.preferZoom > 1) {
-      const W = S.getVideoTracks()[0], J = ((_d = W.getCapabilities) == null ? void 0 : _d.call(W)) ?? {};
-      if (J.zoom) {
-        const V = Math.min(Math.max(Q.preferZoom, J.zoom.min), J.zoom.max);
+      const l = __spreadValues(__spreadValues({}, z), (_c = Q.videoConstraints) != null ? _c : {});
+      let S;
+      try {
+        S = yield navigator.mediaDevices.getUserMedia({
+          audio: false,
+          video: l
+        });
+      } catch (W) {
         try {
-          await W.applyConstraints({ advanced: [{ zoom: V }] });
-        } catch {
+          S = yield navigator.mediaDevices.getUserMedia({
+            audio: false,
+            video: __spreadProps(__spreadValues({}, l), {
+              width: { ideal: 1280 },
+              height: { ideal: 720 }
+            })
+          });
+        } catch (J) {
+          const V = {
+            code: W instanceof DOMException && W.name === "NotAllowedError" ? "camera_denied" : "camera_unavailable",
+            message: J instanceof Error ? J.message : String(J),
+            cause: J
+          };
+          throw (_d = Q.onError) == null ? void 0 : _d.call(Q, V), J;
         }
       }
-    }
-    U.value = S, R.srcObject = S, R.setAttribute("playsinline", "true"), R.muted = true, await R.play(), B.value = R.videoWidth, d.value = R.videoHeight, F.value = true;
+      if (Q.preferZoom && Q.preferZoom > 1) {
+        const W = S.getVideoTracks()[0], J = (_f = (_e = W.getCapabilities) == null ? void 0 : _e.call(W)) != null ? _f : {};
+        if (J.zoom) {
+          const V = Math.min(Math.max(Q.preferZoom, J.zoom.min), J.zoom.max);
+          try {
+            yield W.applyConstraints({ advanced: [{ zoom: V }] });
+          } catch (e2) {
+          }
+        }
+      }
+      U.value = S, R.srcObject = S, R.setAttribute("playsinline", "true"), R.muted = true, yield R.play(), B.value = R.videoWidth, d.value = R.videoHeight, F.value = true;
+    });
   }
   function N() {
     U.value && (U.value.getTracks().forEach((R) => R.stop()), U.value = null), F.value = false;
@@ -104,7 +139,7 @@ function x(Q) {
     return F.addEventListener("error", () => {
       (self.URL || self.webkitURL).revokeObjectURL(U);
     }), F;
-  } catch {
+  } catch (e2) {
     return new Worker(
       "data:text/javascript;base64," + C,
       {
@@ -123,15 +158,16 @@ class j {
     __publicField(this, "nextFrameId", 0);
     __publicField(this, "opts");
     __publicField(this, "inFlight", 0);
+    var _a;
     this.opts = U, this.bufferLength = U.width * U.height * 4, this.worker = new x(), this.worker.onmessage = (B) => this.onMessage(B.data), this.worker.onerror = (B) => {
-      var _a, _b;
-      (_b = (_a = this.opts).onError) == null ? void 0 : _b.call(_a, {
+      var _a2, _b;
+      (_b = (_a2 = this.opts).onError) == null ? void 0 : _b.call(_a2, {
         code: "worker_crashed",
         message: B.message || "worker error",
         cause: B.error
       });
     };
-    const F = Math.max(2, U.poolSize ?? 3);
+    const F = Math.max(2, (_a = U.poolSize) != null ? _a : 3);
     for (let B = 0; B < F; B++)
       this.pool.push(new Uint8ClampedArray(this.bufferLength));
   }
@@ -154,7 +190,8 @@ class j {
    * @returns 利用可能なバッファ。フレーム取得側はここに RGBA を書き込んで sendFrame に渡す
    */
   acquireBuffer() {
-    return this.pool.pop() ?? null;
+    var _a;
+    return (_a = this.pool.pop()) != null ? _a : null;
   }
   /**
    * Worker が解析中のフレーム数（バックプレッシャ判定に利用）
@@ -275,47 +312,49 @@ function w(Q) {
     var _a;
     U.value !== J && (U.value = J, (_a = Q.onStatusChange) == null ? void 0 : _a.call(Q, J));
   }
-  async function l(J) {
-    var _a;
-    if (!B) {
-      R("initializing"), d = O(Q.roiSize), B = new j({
-        width: Q.roiSize,
-        height: Q.roiSize,
-        poolSize: 3,
-        onDecoded: (V, k) => {
-          var _a2;
-          F.value = k, (_a2 = Q.onStats) == null ? void 0 : _a2.call(Q, k), N.accept(V) && Q.onDecoded(V, k);
-        },
-        onFrameDone: (V) => {
-          var _a2;
-          F.value = V, (_a2 = Q.onStats) == null ? void 0 : _a2.call(Q, V);
-        },
-        onError: (V) => {
-          var _a2;
-          R("error"), (_a2 = Q.onError) == null ? void 0 : _a2.call(Q, V);
-        }
-      });
-      try {
-        await B.init();
-      } catch (V) {
-        R("error"), (_a = Q.onError) == null ? void 0 : _a.call(Q, {
-          code: "wasm_init_failed",
-          message: V instanceof Error ? V.message : String(V),
-          cause: V
+  function l(J) {
+    return __async(this, null, function* () {
+      var _a;
+      if (!B) {
+        R("initializing"), d = O(Q.roiSize), B = new j({
+          width: Q.roiSize,
+          height: Q.roiSize,
+          poolSize: 3,
+          onDecoded: (V, k) => {
+            var _a2;
+            F.value = k, (_a2 = Q.onStats) == null ? void 0 : _a2.call(Q, k), N.accept(V) && Q.onDecoded(V, k);
+          },
+          onFrameDone: (V) => {
+            var _a2;
+            F.value = V, (_a2 = Q.onStats) == null ? void 0 : _a2.call(Q, V);
+          },
+          onError: (V) => {
+            var _a2;
+            R("error"), (_a2 = Q.onError) == null ? void 0 : _a2.call(Q, V);
+          }
         });
-        return;
-      }
-      Q.binarizerStrategy && Q.binarizerStrategy !== "auto" && B.setStrategy(Q.binarizerStrategy), R("running"), Z = I(J, () => {
-        if (!B || !d || B.pendingFrames() >= 2) return;
-        const V = B.acquireBuffer();
-        if (!V) return;
-        if (!d.extract(J, V)) {
-          B.acquireBuffer();
+        try {
+          yield B.init();
+        } catch (V) {
+          R("error"), (_a = Q.onError) == null ? void 0 : _a.call(Q, {
+            code: "wasm_init_failed",
+            message: V instanceof Error ? V.message : String(V),
+            cause: V
+          });
           return;
         }
-        B.sendFrame(V);
-      });
-    }
+        Q.binarizerStrategy && Q.binarizerStrategy !== "auto" && B.setStrategy(Q.binarizerStrategy), R("running"), Z = I(J, () => {
+          if (!B || !d || B.pendingFrames() >= 2) return;
+          const V = B.acquireBuffer();
+          if (!V) return;
+          if (!d.extract(J, V)) {
+            B.acquireBuffer();
+            return;
+          }
+          B.sendFrame(V);
+        });
+      }
+    });
   }
   function S() {
     Z == null ? void 0 : Z.cancel(), Z = null, B == null ? void 0 : B.dispose(), B = null, d = null, N.reset(), R("idle");
@@ -374,19 +413,21 @@ const v = h({
       "qr-scanner--running": l.value === "running",
       "qr-scanner--error": l.value === "error"
     })), J = n(() => {
-      var _a;
-      return l.value === "error" ? ((_a = B.value) == null ? void 0 : _a.message) ?? "" : l.value === "running" ? "\u67A0\u306B\u5408\u308F\u305B\u3066\u5C11\u3057\u96E2\u3057\u3066\u304F\u3060\u3055\u3044" : l.value === "initializing" ? "\u521D\u671F\u5316\u4E2D\u2026" : l.value === "requesting_camera" ? "\u30AB\u30E1\u30E9\u3092\u8981\u6C42\u3057\u3066\u3044\u307E\u3059\u2026" : "";
+      var _a, _b;
+      return l.value === "error" ? (_b = (_a = B.value) == null ? void 0 : _a.message) != null ? _b : "" : l.value === "running" ? "\u67A0\u306B\u5408\u308F\u305B\u3066\u5C11\u3057\u96E2\u3057\u3066\u304F\u3060\u3055\u3044" : l.value === "initializing" ? "\u521D\u671F\u5316\u4E2D\u2026" : l.value === "requesting_camera" ? "\u30AB\u30E1\u30E9\u3092\u8981\u6C42\u3057\u3066\u3044\u307E\u3059\u2026" : "";
     });
-    async function V() {
-      if (F.value) {
-        B.value = null;
-        try {
-          await N.start(F.value), await R.start(F.value);
-        } catch (E) {
-          const a = E instanceof Error ? E.message : String(E);
-          B.value = { code: "unknown", message: a, cause: E }, U("error", B.value);
+    function V() {
+      return __async(this, null, function* () {
+        if (F.value) {
+          B.value = null;
+          try {
+            yield N.start(F.value), yield R.start(F.value);
+          } catch (E) {
+            const a = E instanceof Error ? E.message : String(E);
+            B.value = { code: "unknown", message: a, cause: E }, U("error", B.value);
+          }
         }
-      }
+      });
     }
     function k() {
       R.stop(), N.stop(), Z && (clearTimeout(Z), Z = null), d.value = false;
