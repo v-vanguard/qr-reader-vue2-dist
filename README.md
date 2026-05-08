@@ -19,31 +19,67 @@ iPad の暗所環境で 2cm 角の極小 QR コード（V4–V6 / JSON 想定）
 ## 前提
 
 - `git` がインストールされていること
+- ホストアプリが **Vue 2.6.x** 以上であること（2.7.x も可）
 
-それだけです。配布 repo は public なので、PAT / SSH 鍵 / `~/.npmrc` のセットアップは **一切不要**です。Docker / CI など認証情報を持たない環境からもそのまま install できます。
+配布 repo は public なので、PAT / SSH 鍵 / `~/.npmrc` のセットアップは **一切不要**です。Docker / CI など認証情報を持たない環境からもそのまま install できます。
 
 ## インストール
 
 タグを `#vX.Y.Z` で必ず固定してください（`#main` 直 install はバージョン破壊リスク）。
 
 ```bash
-npm install git+https://github.com/v-vanguard/qr-reader-vue2-dist.git#v0.1.0
+npm install git+https://github.com/v-vanguard/qr-reader-vue2-dist.git#v0.2.0
+npm install @vue/composition-api
 ```
+
+`@vue/composition-api` は **Vue 2.6 でも 2.7 でも必須**。本パッケージは `@vue/composition-api` の API を使ってビルドされており、ホスト側でのプラグイン登録が必要です。
 
 `package.json` には次のように記録されます:
 
 ```json
 {
   "dependencies": {
-    "@v-vanguard/qr-reader-vue2": "git+https://github.com/v-vanguard/qr-reader-vue2-dist.git#v0.1.0"
+    "@v-vanguard/qr-reader-vue2": "git+https://github.com/v-vanguard/qr-reader-vue2-dist.git#v0.2.0",
+    "@vue/composition-api": "^1.7.2"
   }
 }
+```
+
+### プラグイン登録（必須）
+
+ホストアプリのエントリで Vue 2 に `@vue/composition-api` プラグインを登録します。これを忘れると `ref is not a function` 系のエラーで落ちます。
+
+```js
+// main.js / main.ts
+import Vue from 'vue';
+import VueCompositionAPI from '@vue/composition-api';
+
+Vue.use(VueCompositionAPI);
+
+// 以降に new Vue({...}) など
+```
+
+Nuxt 2 の場合は plugin として登録:
+
+```js
+// plugins/composition-api.js
+import Vue from 'vue';
+import VueCompositionAPI from '@vue/composition-api';
+Vue.use(VueCompositionAPI);
+```
+
+```js
+// nuxt.config.js
+export default {
+  plugins: ['~/plugins/composition-api.js'],
+  // ...
+};
 ```
 
 semver 範囲で追従したい場合（タグが semver になっている前提）:
 
 ```bash
-npm install "git+https://github.com/v-vanguard/qr-reader-vue2-dist.git#semver:^0.1.0"
+npm install "git+https://github.com/v-vanguard/qr-reader-vue2-dist.git#semver:^0.2.0"
 ```
 
 ### 更新
@@ -51,7 +87,7 @@ npm install "git+https://github.com/v-vanguard/qr-reader-vue2-dist.git#semver:^0
 利用したいバージョンのタグへ書き換えて `npm install` を再実行するだけ。
 
 ```bash
-npm install git+https://github.com/v-vanguard/qr-reader-vue2-dist.git#v0.2.0
+npm install git+https://github.com/v-vanguard/qr-reader-vue2-dist.git#v0.3.0
 ```
 
 ## CI / Docker で install する場合

@@ -38,7 +38,7 @@ var __async = (__this, __arguments, generator) => {
     step((generator = generator.apply(__this, __arguments)).next());
   });
 };
-import { defineComponent as h, ref as T, computed as n, watch as p, onMounted as c, onBeforeUnmount as Y } from "vue";
+import { defineComponent as h, ref as T, computed as n, watch as p, onMounted as c, onBeforeUnmount as Y } from "@vue/composition-api";
 const G = h({
   name: "QrGuideOverlay",
   props: {

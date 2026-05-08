@@ -1,4 +1,4 @@
-import { Ref } from 'vue';
+import { Ref } from '@vue/composition-api';
 import { ScannerError } from '../types';
 export interface UseCameraOptions {
     videoConstraints?: MediaTrackConstraints;

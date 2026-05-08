@@ -1,4 +1,4 @@
-import { Ref } from 'vue';
+import { Ref } from '@vue/composition-api';
 import { BinarizerStrategy, DecoderStats, ScannerError, ScannerStatus } from '../types';
 export interface UseDecoderOptions {
     roiSize: number;
